@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>V201 活動報告画面</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --navy:#0f2c52; --blue:#1f6feb; --lblue:#e8f1ff; --bg:#eef2f7;
+    --success:#1f9d55; --warn:#d9822b; --danger:#d64545;
+    --line:#d7e0ec; --text:#1c2b40; --sub:#64748b;
+  }
+  body{background:#5a6678;font-family:"Noto Sans JP",sans-serif;}
+  .screen{width:1920px;height:1080px;background:var(--bg);overflow:hidden;
+    position:relative;display:flex;color:var(--text);}
+  h1,h2,h3,.brand,.page-title,.sec-ttl{font-family:"Zen Kaku Gothic New",sans-serif;}
+
+  /* Sidebar */
+  .sidebar{width:280px;height:100%;background:var(--navy);color:#fff;
+    display:flex;flex-direction:column;flex-shrink:0;}
+  .brand{padding:30px 28px 26px;font-size:26px;font-weight:700;letter-spacing:.5px;
+    border-bottom:1px solid rgba(255,255,255,.12);}
+  .brand small{display:block;font-size:12px;font-weight:500;color:#9db8e0;margin-top:6px;
+    font-family:"Noto Sans JP";letter-spacing:0;}
+  .nav{padding:22px 16px;flex:1;}
+  .nav-label{font-size:12px;color:#7e9bc4;padding:0 12px 12px;letter-spacing:1px;}
+  .nav a{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:10px;
+    color:#cdddf4;text-decoration:none;font-size:15px;font-weight:500;margin-bottom:6px;}
+  .nav a .ico{width:20px;height:20px;display:inline-block;opacity:.9;}
+  .nav a.active{background:var(--blue);color:#fff;box-shadow:0 4px 12px rgba(31,111,235,.4);}
+  .nav a:not(.active):hover{background:rgba(255,255,255,.08);}
+  .side-foot{padding:20px 24px;border-top:1px solid rgba(255,255,255,.12);font-size:13px;color:#9db8e0;}
+
+  /* Main */
+  .main{flex:1;display:flex;flex-direction:column;min-width:0;}
+  .topbar{height:74px;background:#fff;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;justify-content:space-between;padding:0 36px;flex-shrink:0;}
+  .page-title{font-size:22px;font-weight:700;color:var(--navy);}
+  .page-title span{font-size:13px;color:var(--sub);font-weight:500;margin-left:10px;font-family:"Noto Sans JP";}
+  .top-right{display:flex;align-items:center;gap:22px;}
+  .bell{position:relative;width:24px;height:24px;color:var(--navy);}
+  .bell .dot{position:absolute;top:-2px;right:-2px;width:16px;height:16px;background:var(--danger);
+    border-radius:50%;color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center;border:2px solid #fff;}
+  .user{display:flex;align-items:center;gap:12px;}
+  .avatar{width:42px;height:42px;border-radius:50%;background:var(--lblue);color:var(--navy);
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;font-family:"Zen Kaku Gothic New";}
+  .user .uname{font-size:14px;font-weight:700;}
+  .user .uid{font-size:12px;color:var(--sub);}
+
+  .content{flex:1;padding:26px 36px;overflow:hidden;}
+  .crumb{font-size:13px;color:var(--sub);margin-bottom:14px;}
+  .crumb b{color:var(--blue);}
+
+  .layout{display:grid;grid-template-columns:1fr 360px;gap:24px;height:calc(100% - 34px);}
+
+  .panel{background:#fff;border:1px solid var(--line);border-radius:14px;
+    box-shadow:0 1px 3px rgba(15,44,82,.05);}
+  .panel-head{padding:18px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;}
+  .sec-ttl{font-size:18px;font-weight:700;color:var(--navy);}
+  .panel-body{padding:24px 26px;}
+
+  /* 申請情報サマリ（自動入力・読み取り） */
+  .summary{display:grid;grid-template-columns:1fr 1fr;gap:14px 28px;}
+  .summary .row{display:flex;flex-direction:column;gap:5px;}
+  .summary .lbl{font-size:12px;color:var(--sub);font-weight:500;}
+  .summary .val{font-size:15px;font-weight:700;color:var(--text);}
+  .summary .val.cid{font-family:monospace;font-weight:500;}
+  .badge{display:inline-block;padding:4px 11px;border-radius:20px;font-size:12px;font-weight:700;}
+  .b-mensetsu{background:#fdf1e6;color:#d9822b;}
+
+  /* フォーム */
+  .field{margin-bottom:22px;}
+  .field-label{font-size:14px;font-weight:700;color:var(--text);margin-bottom:9px;display:flex;align-items:center;gap:8px;}
+  .req{font-size:11px;background:var(--danger);color:#fff;padding:2px 7px;border-radius:4px;font-weight:700;}
+  textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:14px 16px;
+    font-size:14px;font-family:"Noto Sans JP";color:var(--text);resize:none;line-height:1.7;}
+  textarea::placeholder{color:#a7b4c6;}
+
+  /* 今後の予定（C203） */
+  .choice{display:flex;gap:14px;}
+  .choice label{flex:1;border:1.5px solid var(--line);border-radius:10px;padding:16px 18px;
+    cursor:pointer;display:flex;align-items:center;gap:12px;font-size:15px;font-weight:700;}
+  .choice label.on{border-color:var(--blue);background:var(--lblue);color:var(--navy);}
+  .choice .radio{width:20px;height:20px;border-radius:50%;border:2px solid #b8c6d8;flex-shrink:0;}
+  .choice label.on .radio{border-color:var(--blue);background:radial-gradient(var(--blue) 40%,#fff 45%);}
+  .choice .sub{font-size:12px;color:var(--sub);font-weight:500;margin-left:auto;}
+
+  /* 受験報告（試験区分のとき表示） */
+  .exam-box{border:1px dashed var(--blue);background:#f5f9ff;border-radius:12px;padding:18px 20px;margin-bottom:22px;}
+  .exam-box .et{font-size:13px;font-weight:700;color:var(--blue);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+  .result-choice{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+  .result-choice label{border:1.5px solid var(--line);border-radius:9px;padding:11px 10px;text-align:center;
+    font-size:13px;font-weight:700;cursor:pointer;background:#fff;}
+  .result-choice label.on-success{border-color:var(--success);background:#eef7ee;color:var(--success);}
+  .result-choice label.on-blue{border-color:var(--blue);background:var(--lblue);color:var(--blue);}
+
+  /* footer ボタン */
+  .form-foot{padding:18px 26px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:14px;}
+  .btn{height:46px;border:none;border-radius:10px;padding:0 30px;font-size:15px;font-weight:700;
+    cursor:pointer;font-family:"Noto Sans JP";display:flex;align-items:center;gap:9px;}
+  .btn-ghost{background:#fff;color:var(--sub);border:1.5px solid var(--line);}
+  .btn-primary{background:var(--blue);color:#fff;box-shadow:0 5px 14px rgba(31,111,235,.3);}
+
+  /* 右カラム：ガイド */
+  .side-card{margin-bottom:22px;}
+  .guide-list{list-style:none;}
+  .guide-list li{display:flex;gap:12px;padding:13px 0;border-bottom:1px solid #eef2f7;font-size:13px;line-height:1.6;}
+  .guide-list li:last-child{border-bottom:none;}
+  .guide-list .gn{width:24px;height:24px;border-radius:50%;background:var(--lblue);color:var(--navy);
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;font-family:"Zen Kaku Gothic New";}
+  .ai-card{background:linear-gradient(135deg,#0f2c52,#1f6feb);color:#fff;border:none;}
+  .ai-card .panel-body{padding:22px 24px;}
+  .ai-ttl{font-size:16px;font-weight:700;font-family:"Zen Kaku Gothic New";display:flex;align-items:center;gap:9px;margin-bottom:10px;}
+  .ai-card p{font-size:13px;line-height:1.7;color:#dce8fb;margin-bottom:16px;}
+  .ai-btn{background:#fff;color:var(--navy);width:100%;height:42px;border:none;border-radius:9px;
+    font-weight:700;font-size:14px;cursor:pointer;font-family:"Noto Sans JP";}
+  .status-now{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:var(--warn);
+    margin-left:auto;}
+  .status-now::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--warn);}
+</style>
+</head>
+<body>
+<div class="screen">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">就活＠HCS<small>HOKKAIDO College of Software</small></div>
+    <nav class="nav">
+      <div class="nav-label">MENU</div>
+      <a href="#">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        申請一覧
+      </a>
+      <a href="#">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        新規申請
+      </a>
+      <a href="#" class="active">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v4H4zM4 12h10M4 18h7"/></svg>
+        活動報告
+      </a>
+      <a href="#">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h12"/></svg>
+        過去受験情報
+      </a>
+      <a href="#">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>
+        AIに相談
+      </a>
+    </nav>
+    <div class="side-foot">2026年度 就職活動支援システム<br>v1.0 / 学内LAN専用</div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+    <header class="topbar">
+      <div class="page-title">活動報告<span>V201 活動報告画面</span></div>
+      <div class="top-right">
+        <div class="bell">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+          <span class="dot">3</span>
+        </div>
+        <div class="user">
+          <div class="avatar">情</div>
+          <div>
+            <div class="uname">情報太郎</div>
+            <div class="uid">S3A201 / 学生</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="content">
+      <div class="crumb">申請一覧 ／ <b>活動報告</b></div>
+
+      <div class="layout">
+
+        <!-- 左：報告フォーム -->
+        <section class="panel" style="display:flex;flex-direction:column;">
+          <div class="panel-head">
+            <span class="sec-ttl">活動内容を報告する</span>
+            <span class="status-now">未報告</span>
+          </div>
+
+          <div class="panel-body" style="flex:1;overflow:hidden;">
+
+            <!-- 申請情報（自動入力・読み取り） -->
+            <div style="background:#f8fafd;border:1px solid var(--line);border-radius:12px;padding:18px 22px;margin-bottom:24px;">
+              <div class="summary">
+                <div class="row"><span class="lbl">申請ID</span><span class="val cid">000000010</span></div>
+                <div class="row"><span class="lbl">イベント区分</span><span class="val"><span class="badge b-mensetsu">面接</span></span></div>
+                <div class="row"><span class="lbl">企業名</span><span class="val">株式会社IIJプロテック</span></div>
+                <div class="row"><span class="lbl">実施日時</span><span class="val">2026/05/28 14:00</span></div>
+              </div>
+            </div>
+
+            <!-- 活動内容 -->
+            <div class="field">
+              <div class="field-label">活動内容<span class="req">必須</span></div>
+              <textarea rows="3" placeholder="実施した就職活動の内容を入力してください（面接内容・説明会の内容など）"></textarea>
+            </div>
+
+            <!-- 所感 -->
+            <div class="field">
+              <div class="field-label">所感・メモ<span class="req">必須</span></div>
+              <textarea rows="2" placeholder="活動を通じて感じたこと、次回に向けたメモなどを入力してください"></textarea>
+            </div>
+
+            <!-- 受験報告（試験区分=面接のため表示） -->
+            <div class="exam-box">
+              <div class="et">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                受験報告：試験区分の活動のため、選考結果の入力が必要です
+              </div>
+              <div class="field-label" style="font-size:13px;">選考結果<span class="req">必須</span></div>
+              <div class="result-choice">
+                <label class="on-success">合格・継続</label>
+                <label>内定</label>
+                <label>内定辞退</label>
+                <label>不合格</label>
+              </div>
+            </div>
+
+            <!-- 今後の予定（C203） -->
+            <div class="field" style="margin-bottom:0;">
+              <div class="field-label">今後の予定<span class="req">必須</span></div>
+              <div class="choice">
+                <label class="on">
+                  <span class="radio"></span>進める
+                  <span class="sub">次回の申請を登録します</span>
+                </label>
+                <label>
+                  <span class="radio"></span>進めない
+                  <span class="sub">この企業の活動を終了</span>
+                </label>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="form-foot">
+            <button class="btn btn-ghost">一時保存</button>
+            <button class="btn btn-primary">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12l5 5L20 7"/></svg>
+              報告する
+            </button>
+          </div>
+        </section>
+
+        <!-- 右：ガイド & AI -->
+        <aside style="display:flex;flex-direction:column;">
+          <div class="panel side-card">
+            <div class="panel-head"><span class="sec-ttl" style="font-size:16px;">報告の流れ</span></div>
+            <div class="panel-body" style="padding:8px 24px;">
+              <ul class="guide-list">
+                <li><span class="gn">1</span>活動内容・所感を入力します。</li>
+                <li><span class="gn">2</span>面接・筆記・適性は選考結果を選択します。</li>
+                <li><span class="gn">3</span>今後の予定を「進める／進めない」で選択。</li>
+                <li><span class="gn">4</span>「報告する」で担任へ送信され確認されます。</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="panel ai-card side-card">
+            <div class="panel-body">
+              <div class="ai-ttl">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>
+                AIアシスト
+              </div>
+              <p>記載漏れや内容の矛盾を送信前にチェックします。所感の書き方に迷ったときも相談できます。</p>
+              <button class="ai-btn">AIに相談する</button>
+            </div>
+          </div>
+
+          <div class="panel" style="flex:1;">
+            <div class="panel-head"><span class="sec-ttl" style="font-size:16px;">報告期限</span></div>
+            <div class="panel-body">
+              <p style="font-size:13px;color:var(--sub);line-height:1.8;">
+                報告は原則イベント当日に行ってください。<br>
+                未報告の場合、翌日9時にリマインド通知が送信されます。
+              </p>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
