@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>就活＠HCS AIアシスト画面（PC版 1920×1080）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0f2c52; --navy-2:#16386b; --blue:#1f6feb; --blue-d:#1559c0;
+    --blue-l:#e8f1ff; --sky:#4d94ff; --ink:#1a2533; --slate:#5b6b80;
+    --line:#e2e8f1; --bg:#eef2f7; --card:#ffffff;
+    --ok:#1f9d55; --ok-bg:#e6f6ed; --warn:#d9822b; --warn-bg:#fdf1e3;
+    --danger:#d64545; --danger-bg:#fbeaea; --gray:#8696aa; --gray-bg:#eef1f5;
+    --purple:#6b4fd8; --purple-bg:#efeafd;
+    --shadow-sm:0 2px 8px -2px rgba(15,44,82,.14);
+    --font:'Noto Sans JP',sans-serif; --display:'Zen Kaku Gothic New','Noto Sans JP',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#cfd8e6}
+  body{font-family:var(--font);color:var(--ink);-webkit-font-smoothing:antialiased;display:flex;justify-content:center;align-items:flex-start;padding:40px}
+  .screen{width:1920px;height:1080px;flex:0 0 auto;position:relative;overflow:hidden;background:var(--bg);display:flex}
+  .brandmark{border-radius:12px;background:linear-gradient(150deg,var(--sky),var(--blue) 55%,var(--navy-2));display:flex;align-items:center;justify-content:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
+
+  /* sidebar */
+  .side{width:300px;flex:0 0 300px;background:var(--navy);color:#fff;display:flex;flex-direction:column;padding:30px 22px}
+  .side .logo{display:flex;align-items:center;gap:15px;padding:0 8px 26px;border-bottom:1px solid rgba(255,255,255,.1)}
+  .side .logo .brandmark{width:50px;height:50px;flex:0 0 50px}
+  .side .logo .brandmark svg{width:27px;height:27px}
+  .side .logo .t{font-family:var(--display);font-weight:900;font-size:21px;line-height:1.25}
+  .side .logo .t small{display:block;font-size:11px;font-weight:500;opacity:.62;letter-spacing:.1em;margin-top:4px}
+  .nav-grp{padding:24px 0 10px;font-size:11px;font-weight:700;letter-spacing:.12em;color:rgba(255,255,255,.4);padding-left:12px}
+  .nav-i{display:flex;align-items:center;gap:14px;padding:13px 15px;border-radius:13px;font-size:15px;font-weight:600;color:rgba(255,255,255,.78);margin-bottom:5px}
+  .nav-i svg{width:21px;height:21px;flex:0 0 21px}
+  .nav-i.on{background:linear-gradient(135deg,var(--blue),var(--blue-d));color:#fff;box-shadow:0 8px 18px -8px rgba(31,111,235,.7)}
+  .side .spacer{flex:1}
+  .side .me{display:flex;align-items:center;gap:13px;background:rgba(255,255,255,.07);border-radius:15px;padding:13px}
+  .side .me .av{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--sky),var(--blue));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;flex:0 0 44px}
+  .side .me .who{flex:1;min-width:0}
+  .side .me .who b{font-size:15px;font-weight:700;display:block}
+  .side .me .who span{font-size:12px;opacity:.6;display:block;margin-top:2px}
+  .side .me .lo{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;flex:0 0 36px}
+  .side .me .lo svg{width:18px;height:18px}
+
+  /* main */
+  .main{flex:1;display:flex;flex-direction:column;min-width:0}
+  .topbar{height:84px;flex:0 0 84px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 36px;gap:22px}
+  .topbar .crumb{font-size:15px;color:var(--gray);font-weight:600}
+  .topbar .crumb b{color:var(--navy);font-weight:700}
+  .topbar .spacer{flex:1}
+  .topbar .onprem{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:600;color:var(--ok);background:var(--ok-bg);padding:9px 15px;border-radius:11px}
+  .topbar .onprem svg{width:16px;height:16px}
+  .topbar .bell{width:52px;height:52px;border-radius:14px;background:var(--bg);display:flex;align-items:center;justify-content:center;position:relative}
+  .topbar .bell svg{width:23px;height:23px;color:var(--slate)}
+  .topbar .av{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--sky),var(--blue));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:19px;color:#fff}
+
+  .content{flex:1;overflow:hidden;padding:28px 36px;display:grid;grid-template-columns:1.55fr 1fr;gap:24px}
+
+  /* chat panel */
+  .chat{background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;overflow:hidden}
+  .chat .ch-head{display:flex;align-items:center;gap:14px;padding:20px 24px;border-bottom:1px solid var(--line)}
+  .chat .ch-head .ai{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--sky),var(--blue) 60%,var(--purple));display:flex;align-items:center;justify-content:center;flex:0 0 48px;box-shadow:0 8px 18px -8px rgba(31,111,235,.6)}
+  .chat .ch-head .ai svg{width:26px;height:26px}
+  .chat .ch-head .ti{flex:1}
+  .chat .ch-head .ti b{font-family:var(--display);font-weight:900;font-size:18px;color:var(--navy);display:block}
+  .chat .ch-head .ti span{font-size:12.5px;color:var(--slate);font-weight:500}
+  .chat .ch-head .ctx{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:var(--blue);background:var(--blue-l);padding:7px 13px;border-radius:999px}
+  .chat .ch-head .ctx svg{width:14px;height:14px}
+
+  .chat .body{flex:1;overflow:hidden;padding:22px 24px;display:flex;flex-direction:column;gap:18px;background:linear-gradient(180deg,#fbfdff,#f6f9fe)}
+  .msg{display:flex;gap:12px;max-width:88%}
+  .msg .a{width:38px;height:38px;border-radius:11px;flex:0 0 38px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px}
+  .msg.ai .a{background:linear-gradient(135deg,var(--sky),var(--blue) 60%,var(--purple));color:#fff}
+  .msg.me{margin-left:auto;flex-direction:row-reverse}
+  .msg.me .a{background:var(--blue-l);color:var(--blue-d)}
+  .bubble{padding:14px 17px;border-radius:15px;font-size:14px;line-height:1.7;font-weight:500}
+  .msg.ai .bubble{background:#fff;border:1px solid var(--line);border-top-left-radius:5px;color:var(--ink);box-shadow:var(--shadow-sm)}
+  .msg.me .bubble{background:linear-gradient(135deg,var(--blue),var(--blue-d));color:#fff;border-top-right-radius:5px}
+  .bubble .flag{display:flex;align-items:flex-start;gap:9px;padding:11px 13px;border-radius:11px;margin-top:11px;font-size:13px;line-height:1.6}
+  .bubble .flag.warn{background:var(--warn-bg);color:#9a5b1c}
+  .bubble .flag.warn svg{color:var(--warn)}
+  .bubble .flag.ok{background:var(--ok-bg);color:#13683a}
+  .bubble .flag.ok svg{color:var(--ok)}
+  .bubble .flag svg{width:16px;height:16px;flex:0 0 16px;margin-top:1px}
+  .bubble .flag b{font-weight:700}
+
+  .chat .foot{padding:18px 24px;border-top:1px solid var(--line);background:#fff}
+  .quick{display:flex;gap:8px;margin-bottom:13px;flex-wrap:wrap}
+  .quick .q{font-size:12.5px;font-weight:700;color:var(--blue-d);background:var(--blue-l);border:1px solid #d3e4ff;border-radius:999px;padding:8px 14px;display:flex;align-items:center;gap:6px}
+  .quick .q svg{width:13px;height:13px}
+  .composer{display:flex;align-items:center;gap:12px;background:var(--bg);border:1.5px solid var(--line);border-radius:15px;padding:7px 7px 7px 18px}
+  .composer .ph{flex:1;font-size:14px;color:#9aa8ba}
+  .composer .send{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,var(--blue),var(--blue-d));display:flex;align-items:center;justify-content:center;flex:0 0 46px;box-shadow:0 8px 16px -8px rgba(31,111,235,.7)}
+  .composer .send svg{width:20px;height:20px;color:#fff}
+
+  /* right column */
+  .rcol{display:flex;flex-direction:column;gap:24px;overflow:hidden}
+  .panel{background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow-sm);overflow:hidden}
+  .panel .ph{display:flex;align-items:center;justify-content:space-between;padding:17px 22px;border-bottom:1px solid var(--line)}
+  .panel .ph .h{font-family:var(--display);font-weight:900;font-size:16px;color:var(--navy);display:flex;align-items:center;gap:10px}
+  .panel .ph .h .bar{width:4px;height:18px;border-radius:2px;background:var(--blue)}
+
+  /* check results */
+  .checks{padding:8px 0}
+  .ck{display:flex;align-items:flex-start;gap:13px;padding:13px 22px}
+  .ck+.ck{border-top:1px solid var(--line)}
+  .ck .ic{width:34px;height:34px;border-radius:10px;flex:0 0 34px;display:flex;align-items:center;justify-content:center}
+  .ck .ic svg{width:18px;height:18px}
+  .ck.ok .ic{background:var(--ok-bg);color:var(--ok)}
+  .ck.warn .ic{background:var(--warn-bg);color:var(--warn)}
+  .ck .tx{flex:1}
+  .ck .tx b{font-size:14px;font-weight:700;color:var(--ink);display:block}
+  .ck .tx span{font-size:12.5px;color:var(--slate);font-weight:500;display:block;margin-top:3px;line-height:1.55}
+
+  /* activity viz */
+  .viz{padding:20px 22px}
+  .viz .ring-row{display:flex;align-items:center;gap:20px}
+  .ring{width:104px;height:104px;border-radius:50%;flex:0 0 104px;background:conic-gradient(var(--blue) 0 72%, #e7edf5 72% 100%);position:relative;display:flex;align-items:center;justify-content:center}
+  .ring::after{content:"";position:absolute;width:74px;height:74px;border-radius:50%;background:#fff}
+  .ring .c{position:relative;z-index:2;text-align:center}
+  .ring .c b{font-family:var(--display);font-weight:900;font-size:24px;color:var(--navy);display:block;line-height:1}
+  .ring .c span{font-size:10.5px;color:var(--gray);font-weight:600}
+  .viz .stats2{flex:1;display:flex;flex-direction:column;gap:11px}
+  .v2{display:flex;align-items:center;justify-content:space-between}
+  .v2 .l{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--slate);font-weight:600}
+  .v2 .l i{width:10px;height:10px;border-radius:3px;flex:0 0 10px}
+  .v2 .n{font-family:var(--display);font-weight:900;font-size:17px;color:var(--navy)}
+
+  /* cheer */
+  .cheer{padding:20px 22px;background:linear-gradient(150deg,#eef5ff,#f6eefe);display:flex;align-items:center;gap:16px}
+  .cheer .em{width:54px;height:54px;border-radius:15px;background:#fff;display:flex;align-items:center;justify-content:center;flex:0 0 54px;box-shadow:var(--shadow-sm)}
+  .cheer .em svg{width:28px;height:28px;color:var(--warn)}
+  .cheer .tx b{font-family:var(--display);font-weight:900;font-size:15px;color:var(--navy);display:block;line-height:1.4}
+  .cheer .tx span{font-size:12.5px;color:var(--slate);font-weight:500;display:block;margin-top:5px;line-height:1.55}
+</style>
+</head>
+<body>
+  <div class="screen">
+
+    <!-- SIDEBAR (student) -->
+    <aside class="side">
+      <div class="logo">
+        <div class="brandmark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+        <div class="t">就活＠HCS<small>STUDENT</small></div>
+      </div>
+
+      <div class="nav-grp">メニュー</div>
+      <div class="nav-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>申請一覧</div>
+      <div class="nav-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>新規申請</div>
+      <div class="nav-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 15l2 2 4-4"/></svg>活動報告</div>
+      <div class="nav-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>受験報告閲覧</div>
+      <div class="nav-i on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg>AIアシスト</div>
+
+      <div class="spacer"></div>
+      <div class="me">
+        <div class="av">情</div>
+        <div class="who"><b>情報太郎</b><span>S3A201 ／ 学生</span></div>
+        <div class="lo"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg></div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main">
+      <div class="topbar">
+        <div class="crumb">AIアシスト / <b>申請内容の事前チェック</b></div>
+        <div class="spacer"></div>
+        <div class="onprem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>オンプレミスAIで処理（学外送信なし）</div>
+        <div class="bell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div>
+        <div class="av">情</div>
+      </div>
+
+      <div class="content">
+
+        <!-- CHAT -->
+        <div class="chat">
+          <div class="ch-head">
+            <div class="ai"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg></div>
+            <div class="ti"><b>AIアシスタント</b><span>申請・報告の記載漏れや矛盾をチェックし、添削します</span></div>
+            <div class="ctx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>申請：ほくしん情報システム</div>
+          </div>
+
+          <div class="body">
+            <div class="msg ai">
+              <div class="a">AI</div>
+              <div class="bubble">こんにちは、情報太郎さん。作成中の申請内容を確認しました。気になる点が2件あります。提出前に見直しておくと安心です。
+                <div class="flag warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.3 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.3a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg><span><b>同一日の区分が重複しています。</b>6/2(月) に「欠席3-4限」と別申請の「早退4限」が重なっています。時限の指定を見直してください。</span></div>
+                <div class="flag warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.3 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.3a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg><span><b>学校申込の締切日が未入力です。</b>「学校申込：有り」を選択していますが、申込締切日が空欄です。</span></div>
+              </div>
+            </div>
+
+            <div class="msg me">
+              <div class="a">情</div>
+              <div class="bubble">ありがとう。所感の書き方もアドバイスもらえる？</div>
+            </div>
+
+            <div class="msg ai">
+              <div class="a">AI</div>
+              <div class="bubble">もちろんです。所感は「事実 → 気づき → 次の行動」の順でまとめると伝わりやすくなります。説明会で印象に残った点を一つ挙げ、それを受けて自分が何を確認したいかを書くと、次の選考につながる具体的な内容になります。
+                <div class="flag ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>申請日（5/29）とイベント日（6/2）の前後関係は問題ありません。</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="foot">
+            <div class="quick">
+              <span class="q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>この申請をチェック</span>
+              <span class="q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>所感を添削して</span>
+              <span class="q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg>日程の矛盾を確認</span>
+            </div>
+            <div class="composer">
+              <span class="ph">AIに相談する内容を入力してください…</span>
+              <div class="send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="rcol">
+          <div class="panel">
+            <div class="ph"><div class="h"><span class="bar"></span>事前チェック結果</div></div>
+            <div class="checks">
+              <div class="ck warn">
+                <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.3 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.3a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg></div>
+                <div class="tx"><b>同一日の区分が重複</b><span>6/2(月) 欠席3-4限 と 早退4限 が重複しています</span></div>
+              </div>
+              <div class="ck warn">
+                <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.3 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.3a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg></div>
+                <div class="tx"><b>申込締切日が未入力</b><span>学校申込「有り」のとき締切日は必須です</span></div>
+              </div>
+              <div class="ck ok">
+                <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                <div class="tx"><b>申請日とイベント日の整合</b><span>5/29 申請 → 6/2 実施。前後関係は適切です</span></div>
+              </div>
+              <div class="ck ok">
+                <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                <div class="tx"><b>必須項目の入力</b><span>企業名・日時・場所・形態は入力済みです</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="ph"><div class="h"><span class="bar"></span>活動実績の可視化</div></div>
+            <div class="viz">
+              <div class="ring-row">
+                <div class="ring"><div class="c"><b>18</b><span>活動件数</span></div></div>
+                <div class="stats2">
+                  <div class="v2"><div class="l"><i style="background:var(--blue)"></i>申請・実施済</div><div class="n">13</div></div>
+                  <div class="v2"><div class="l"><i style="background:var(--warn)"></i>承認待ち</div><div class="n">3</div></div>
+                  <div class="v2"><div class="l"><i style="background:var(--ok)"></i>受験報告 提出</div><div class="n">9</div></div>
+                  <div class="v2"><div class="l"><i style="background:var(--purple)"></i>受験企業数</div><div class="n">7社</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="cheer">
+              <div class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21 8 14 2 9.4h7.6z"/></svg></div>
+              <div class="tx"><b>今月は先月より活動が4件増えています。</b><span>このペースで継続できています。次の受験報告まであと一歩、応援しています。</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
