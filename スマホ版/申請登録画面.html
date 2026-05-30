@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>申請登録画面（スマホ版 320×568）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0f2c52; --blue:#1f6feb; --paleblue:#e8f1ff; --bg:#eef2f7;
+    --success:#1f9d55; --warn:#d9822b; --danger:#d64545;
+    --line:#d8e0ea; --text:#1f2a37; --muted:#6b7785;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{background:#c7ced6;}
+  body{font-family:"Noto Sans JP",sans-serif;color:var(--text);display:flex;justify-content:center;align-items:flex-start;padding:30px;}
+  .heading{font-family:"Zen Kaku Gothic New",sans-serif;}
+  .screen{width:320px;height:568px;overflow:hidden;background:var(--bg);display:flex;flex-direction:column;position:relative;}
+
+  /* top app bar */
+  .appbar{flex:0 0 auto;background:var(--navy);color:#fff;padding:10px 14px;display:flex;align-items:center;gap:10px;}
+  .appbar .logo{width:30px;height:30px;border-radius:8px;background:var(--blue);display:flex;align-items:center;justify-content:center;flex:0 0 30px;font-family:"Zen Kaku Gothic New";font-weight:700;font-size:15px;}
+  .appbar .t{flex:1;}
+  .appbar .t b{font-family:"Zen Kaku Gothic New";font-weight:700;font-size:14px;display:block;line-height:1.1;}
+  .appbar .t small{font-size:8.5px;color:#9db8e0;letter-spacing:.04em;}
+  .appbar .bell{width:30px;height:30px;border-radius:9px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;position:relative;}
+  .appbar .bell svg{width:15px;height:15px;color:#fff;}
+  .appbar .bell .dot{position:absolute;top:6px;right:6px;width:6px;height:6px;border-radius:50%;background:var(--danger);border:1.5px solid var(--navy);}
+  .appbar .av{width:30px;height:30px;border-radius:50%;background:#2a4a7a;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;}
+
+  /* page head */
+  .pghead{flex:0 0 auto;background:#fff;border-bottom:1px solid var(--line);padding:9px 13px;}
+  .pghead .ttl{font-family:"Zen Kaku Gothic New";font-weight:700;font-size:15px;color:var(--navy);display:flex;align-items:center;gap:7px;}
+  .pghead .ttl .bar{width:3px;height:15px;border-radius:2px;background:var(--blue);}
+  .pghead .crumb{font-size:9px;color:var(--muted);margin-top:3px;}
+
+  /* scroll body */
+  .scroll{flex:1;overflow:hidden;padding:11px 12px;display:flex;flex-direction:column;gap:11px;}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 1px 2px rgba(15,44,82,.04);}
+  .card-head{display:flex;align-items:center;gap:8px;padding:10px 13px;border-bottom:1px solid #eef2f7;}
+  .card-head svg{width:15px;height:15px;color:var(--blue);}
+  .card-head h2{font-family:"Zen Kaku Gothic New";font-weight:700;font-size:12.5px;color:var(--navy);}
+  .card-body{padding:12px 13px;display:flex;flex-direction:column;gap:12px;}
+
+  .field{display:flex;flex-direction:column;gap:6px;}
+  .field label{font-size:11px;color:#42505f;font-weight:500;display:flex;align-items:center;gap:6px;}
+  .req{font-size:8.5px;background:var(--danger);color:#fff;border-radius:3px;padding:1px 5px;font-weight:500;}
+  .opt{font-size:8.5px;background:#eef2f7;color:var(--muted);border-radius:3px;padding:1px 5px;}
+  .field input,.field select,.field textarea{
+    border:1px solid var(--line);border-radius:8px;background:#fbfcfe;
+    padding:0 11px;font-size:12.5px;font-family:"Noto Sans JP";color:var(--text);height:40px;width:100%;}
+  .field textarea{height:60px;padding:9px 11px;resize:none;line-height:1.5;}
+  .field input::placeholder,.field textarea::placeholder{color:#9aa6b3;}
+  .hint{font-size:9px;color:var(--muted);}
+  .corp-wrap{display:flex;gap:7px;}
+  .corp-wrap input{flex:1;}
+  .corp-wrap .mini{height:40px;padding:0 11px;border:1px solid var(--blue);background:var(--paleblue);color:var(--blue);border-radius:8px;font-size:10.5px;font-weight:500;white-space:nowrap;flex:0 0 auto;}
+  .row2{display:flex;gap:7px;}
+  .row2 input{flex:1;}
+
+  /* segment */
+  .seg{display:flex;flex-wrap:wrap;gap:6px;}
+  .seg .opt-btn{padding:7px 11px;border:1px solid var(--line);background:#fff;border-radius:7px;font-size:11px;color:#42505f;}
+  .seg .opt-btn.on{background:var(--blue);color:#fff;border-color:var(--blue);font-weight:500;}
+
+  /* toggle */
+  .toggle-row{display:flex;align-items:center;gap:10px;}
+  .switch{width:40px;height:23px;border-radius:999px;background:#cbd5e1;position:relative;flex-shrink:0;}
+  .switch.on{background:var(--blue);}
+  .switch .knob{position:absolute;top:3px;left:3px;width:17px;height:17px;border-radius:50%;background:#fff;}
+  .switch.on .knob{left:20px;}
+  .toggle-row .t-txt{font-size:11px;color:#42505f;}
+  .apply-detail{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);display:flex;flex-direction:column;gap:12px;}
+
+  /* AI banner */
+  .ai-banner{background:linear-gradient(135deg,#13325c,#1f6feb);border-radius:12px;padding:12px 13px;color:#fff;display:flex;align-items:center;gap:11px;}
+  .ai-banner .ic{width:32px;height:32px;border-radius:9px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;flex:0 0 32px;}
+  .ai-banner .ic svg{width:17px;height:17px;color:#fff;}
+  .ai-banner .tx{flex:1;min-width:0;}
+  .ai-banner .tx b{font-family:"Zen Kaku Gothic New";font-weight:700;font-size:12px;display:block;}
+  .ai-banner .tx span{font-size:9px;color:#d7e6ff;display:block;margin-top:2px;line-height:1.4;}
+  .ai-banner .go{flex:0 0 auto;background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:8px;font-size:10px;font-weight:500;padding:8px 11px;}
+
+  /* sticky footer */
+  .foot{flex:0 0 auto;background:#fff;border-top:1px solid var(--line);padding:9px 12px;display:flex;gap:9px;}
+  .btn{height:42px;border:none;border-radius:10px;font-size:13px;font-weight:700;font-family:"Noto Sans JP";display:flex;align-items:center;justify-content:center;gap:7px;}
+  .btn svg{width:15px;height:15px;}
+  .btn-ghost{flex:0 0 96px;background:#fff;color:var(--muted);border:1.5px solid var(--line);}
+  .btn-primary{flex:1;background:var(--blue);color:#fff;box-shadow:0 5px 12px rgba(31,111,235,.3);}
+
+  /* bottom tab nav */
+  .tabbar{flex:0 0 auto;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:6px 4px 7px;}
+  .tab-i{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:8.5px;font-weight:600;color:#94a3b8;flex:1;}
+  .tab-i svg{width:18px;height:18px;}
+  .tab-i.on{color:var(--blue);}
+</style>
+</head>
+<body>
+  <div class="screen">
+
+    <!-- TOP APP BAR -->
+    <div class="appbar">
+      <div class="logo">就</div>
+      <div class="t"><b>就活＠HCS</b><small>STUDENT</small></div>
+      <div class="bell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg><span class="dot"></span></div>
+      <div class="av">情</div>
+    </div>
+
+    <!-- PAGE HEAD -->
+    <div class="pghead">
+      <div class="ttl"><span class="bar"></span>申請登録</div>
+      <div class="crumb">就職活動 ＞ 就職活動申請の登録</div>
+    </div>
+
+    <!-- SCROLL BODY -->
+    <div class="scroll">
+
+      <!-- 申請内容 -->
+      <section class="card">
+        <div class="card-head">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+          <h2 class="heading">申請内容</h2>
+        </div>
+        <div class="card-body">
+          <div class="field">
+            <label>企業名 <span class="req">必須</span></label>
+            <div class="corp-wrap">
+              <input type="text" placeholder="登記上の正式名称を入力">
+              <button class="mini">＋ 新規</button>
+            </div>
+            <span class="hint">マスタに無い場合は「新規」から仮登録できます（省略不可）</span>
+          </div>
+
+          <div class="field">
+            <label>開始日時 <span class="req">必須</span></label>
+            <div class="row2"><input type="date" value="2026-06-03"><input type="time" value="10:00"></div>
+          </div>
+          <div class="field">
+            <label>終了日時 <span class="req">必須</span></label>
+            <div class="row2"><input type="date" value="2026-06-03"><input type="time" value="11:30"></div>
+          </div>
+
+          <div class="field">
+            <label>場所区分 <span class="req">必須</span></label>
+            <select><option>選択してください</option><option>自宅</option><option selected>学校</option><option>市内</option><option>道内</option><option>道外</option><option>その他</option></select>
+          </div>
+          <div class="field">
+            <label>場所（会場名・住所）<span class="opt">任意</span></label>
+            <input type="text" placeholder="例）札幌市中央区〇〇ビル 5F">
+          </div>
+
+          <div class="field">
+            <label>イベント区分 <span class="req">必須</span></label>
+            <div class="seg">
+              <span class="opt-btn">説明会(単独)</span>
+              <span class="opt-btn on">説明会(合同)</span>
+              <span class="opt-btn">筆記</span>
+              <span class="opt-btn">適性</span>
+              <span class="opt-btn">面接</span>
+              <span class="opt-btn">内定後活動</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>遅刻／欠席／早退区分 <span class="req">必須</span></label>
+            <select><option value="" selected disabled>選択してください</option><option>遅刻</option><option>欠席</option><option>早退</option></select>
+          </div>
+          <div class="field">
+            <label>対象時限（時限単位で指定）<span class="req">必須</span></label>
+            <input type="text" placeholder="例）2〜4限">
+          </div>
+        </div>
+      </section>
+
+      <!-- 学校申込 -->
+      <section class="card">
+        <div class="card-head">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/></svg>
+          <h2 class="heading">学校申込</h2>
+        </div>
+        <div class="card-body">
+          <div class="toggle-row">
+            <div class="switch on"><div class="knob"></div></div>
+            <span class="t-txt"><strong>学校申込あり</strong>（取りまとめ名簿の対象）</span>
+          </div>
+          <div class="apply-detail">
+            <div class="field">
+              <label>申込締切日 <span class="req">必須</span></label>
+              <input type="date" value="2026-05-31">
+            </div>
+            <div class="field">
+              <label>書類提出要否 <span class="req">必須</span></label>
+              <div class="seg"><span class="opt-btn on">要</span><span class="opt-btn">不要</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- その他連絡事項 -->
+      <section class="card">
+        <div class="card-head">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <h2 class="heading">その他連絡事項</h2>
+        </div>
+        <div class="card-body">
+          <div class="field">
+            <textarea placeholder="移動手段や担任への連絡事項などを入力してください"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- AIアシスト -->
+      <div class="ai-banner">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4c0 2-1.5 3-2.5 4S12 16 12 16"/><circle cx="12" cy="20" r="1"/></svg></div>
+        <div class="tx"><b>AIに相談（事前チェック）</b><span>記載漏れや同一日の区分整合性を自動チェック</span></div>
+        <button class="go">チェック</button>
+      </div>
+
+    </div>
+
+    <!-- STICKY FOOTER -->
+    <div class="foot">
+      <button class="btn btn-ghost">下書き</button>
+      <button class="btn btn-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>申請する</button>
+    </div>
+
+    <!-- BOTTOM TAB -->
+    <div class="tabbar">
+      <div class="tab-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>トップ</div>
+      <div class="tab-i on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>申請登録</div>
+      <div class="tab-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/></svg>活動報告</div>
+      <div class="tab-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>受験報告</div>
+      <div class="tab-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4c0 2-1.5 3-2.5 4S12 16 12 16"/><circle cx="12" cy="20" r="1"/></svg>AI相談</div>
+    </div>
+
+  </div>
+</body>
+</html>
