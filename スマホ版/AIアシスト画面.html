@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>就活＠HCS AIアシスト画面（スマホ版 320×568）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0f2c52; --navy-2:#16386b; --blue:#1f6feb; --blue-d:#1559c0;
+    --blue-l:#e8f1ff; --sky:#4d94ff; --ink:#1a2533; --slate:#5b6b80;
+    --line:#e2e8f1; --bg:#eef2f7; --card:#ffffff;
+    --ok:#1f9d55; --ok-bg:#e6f6ed; --warn:#d9822b; --warn-bg:#fdf1e3;
+    --danger:#d64545; --danger-bg:#fbeaea; --gray:#8696aa; --gray-bg:#eef1f5;
+    --purple:#6b4fd8; --purple-bg:#efeafd;
+    --shadow-sm:0 2px 8px -2px rgba(15,44,82,.14);
+    --font:'Noto Sans JP',sans-serif; --display:'Zen Kaku Gothic New','Noto Sans JP',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#cfd8e6}
+  body{font-family:var(--font);color:var(--ink);-webkit-font-smoothing:antialiased;display:flex;justify-content:center;align-items:flex-start;padding:30px}
+  .screen{width:320px;height:568px;flex:0 0 auto;position:relative;overflow:hidden;background:var(--bg);display:flex;flex-direction:column}
+  .brandmark{border-radius:8px;background:linear-gradient(150deg,var(--sky),var(--blue) 55%,var(--navy-2));display:flex;align-items:center;justify-content:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
+
+  /* top app bar */
+  .appbar{flex:0 0 auto;background:var(--navy);color:#fff;padding:11px 14px;display:flex;align-items:center;gap:10px}
+  .appbar .brandmark{width:30px;height:30px;flex:0 0 30px}
+  .appbar .brandmark svg{width:17px;height:17px}
+  .appbar .t{font-family:var(--display);font-weight:900;font-size:14px;line-height:1.1;flex:1}
+  .appbar .t small{display:block;font-size:8px;font-weight:500;opacity:.6;letter-spacing:.1em;margin-top:1px}
+  .appbar .bell{width:30px;height:30px;border-radius:9px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;position:relative}
+  .appbar .bell svg{width:15px;height:15px;color:#fff}
+  .appbar .bell .dot{position:absolute;top:6px;right:6px;width:6px;height:6px;border-radius:50%;background:var(--warn);border:1.5px solid var(--navy)}
+  .appbar .av{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--sky),var(--blue));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;color:#fff}
+
+  /* AI header strip */
+  .aihead{flex:0 0 auto;background:#fff;border-bottom:1px solid var(--line);padding:9px 13px;display:flex;align-items:center;gap:9px}
+  .aihead .ai{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--sky),var(--blue) 60%,var(--purple));display:flex;align-items:center;justify-content:center;flex:0 0 32px;box-shadow:0 6px 12px -7px rgba(31,111,235,.6)}
+  .aihead .ai svg{width:17px;height:17px}
+  .aihead .ti{flex:1;min-width:0}
+  .aihead .ti b{font-family:var(--display);font-weight:900;font-size:13px;color:var(--navy);display:block;line-height:1.2}
+  .aihead .ti span{font-size:9.5px;color:var(--slate);font-weight:500;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .aihead .ctx{display:flex;align-items:center;gap:4px;font-size:9px;font-weight:700;color:var(--blue);background:var(--blue-l);padding:5px 8px;border-radius:999px;flex:0 0 auto}
+  .aihead .ctx svg{width:10px;height:10px}
+
+  /* scroll body */
+  .scroll{flex:1;overflow:hidden;padding:11px 12px 12px;display:flex;flex-direction:column;gap:11px;background:linear-gradient(180deg,#fbfdff,#f6f9fe)}
+
+  /* messages */
+  .msg{display:flex;gap:7px;max-width:92%}
+  .msg .a{width:26px;height:26px;border-radius:8px;flex:0 0 26px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:9px}
+  .msg.ai .a{background:linear-gradient(135deg,var(--sky),var(--blue) 60%,var(--purple));color:#fff}
+  .msg.me{margin-left:auto;flex-direction:row-reverse}
+  .msg.me .a{background:var(--blue-l);color:var(--blue-d)}
+  .bubble{padding:9px 11px;border-radius:12px;font-size:11px;line-height:1.6;font-weight:500}
+  .msg.ai .bubble{background:#fff;border:1px solid var(--line);border-top-left-radius:4px;color:var(--ink);box-shadow:var(--shadow-sm)}
+  .msg.me .bubble{background:linear-gradient(135deg,var(--blue),var(--blue-d));color:#fff;border-top-right-radius:4px}
+  .bubble .flag{display:flex;align-items:flex-start;gap:6px;padding:7px 9px;border-radius:8px;margin-top:8px;font-size:10px;line-height:1.5}
+  .bubble .flag.warn{background:var(--warn-bg);color:#9a5b1c}
+  .bubble .flag.warn svg{color:var(--warn)}
+  .bubble .flag.ok{background:var(--ok-bg);color:#13683a}
+  .bubble .flag.ok svg{color:var(--ok)}
+  .bubble .flag svg{width:12px;height:12px;flex:0 0 12px;margin-top:1px}
+  .bubble .flag b{font-weight:700}
+
+  /* compact result + viz cards inside scroll */
+  .card{background:#fff;border:1px solid var(--line);border-radius:13px;box-shadow:var(--shadow-sm);overflow:hidden}
+  .card .ph{padding:9px 12px;border-bottom:1px solid var(--line);font-family:var(--display);font-weight:900;font-size:12px;color:var(--navy);display:flex;align-items:center;gap:8px}
+  .card .ph .bar{width:3px;height:13px;border-radius:2px;background:var(--blue)}
+  .card .ph .pill{margin-left:auto;font-size:9px;font-weight:700;color:var(--warn);background:var(--warn-bg);padding:3px 8px;border-radius:999px}
+
+  .ck{display:flex;align-items:flex-start;gap:9px;padding:9px 12px}
+  .ck+.ck{border-top:1px solid var(--line)}
+  .ck .ic{width:26px;height:26px;border-radius:8px;flex:0 0 26px;display:flex;align-items:center;justify-content:center}
+  .ck .ic svg{width:14px;height:14px}
+  .ck.ok .ic{background:var(--ok-bg);color:var(--ok)}
+  .ck.warn .ic{background:var(--warn-bg);color:var(--warn)}
+  .ck .tx{flex:1;min-width:0}
+  .ck .tx b{font-size:11px;font-weight:700;color:var(--ink);display:block}
+  .ck .tx span{font-size:9.5px;color:var(--slate);font-weight:500;display:block;margin-top:2px;line-height:1.45}
+
+  .viz{padding:12px}
+  .viz .ring-row{display:flex;align-items:center;gap:13px}
+  .ring{width:72px;height:72px;border-radius:50%;flex:0 0 72px;background:conic-gradient(var(--blue) 0 72%, #e7edf5 72% 100%);position:relative;display:flex;align-items:center;justify-content:center}
+  .ring::after{content:"";position:absolute;width:50px;height:50px;border-radius:50%;background:#fff}
+  .ring .c{position:relative;z-index:2;text-align:center}
+  .ring .c b{font-family:var(--display);font-weight:900;font-size:17px;color:var(--navy);display:block;line-height:1}
+  .ring .c span{font-size:8px;color:var(--gray);font-weight:600}
+  .viz .stats2{flex:1;display:flex;flex-direction:column;gap:6px}
+  .v2{display:flex;align-items:center;justify-content:space-between}
+  .v2 .l{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--slate);font-weight:600}
+  .v2 .l i{width:8px;height:8px;border-radius:2px;flex:0 0 8px}
+  .v2 .n{font-family:var(--display);font-weight:900;font-size:12px;color:var(--navy)}
+
+  .cheer{padding:11px 12px;background:linear-gradient(150deg,#eef5ff,#f6eefe);display:flex;align-items:center;gap:10px}
+  .cheer .em{width:36px;height:36px;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;flex:0 0 36px;box-shadow:var(--shadow-sm)}
+  .cheer .em svg{width:19px;height:19px;color:var(--warn)}
+  .cheer .tx b{font-family:var(--display);font-weight:900;font-size:11px;color:var(--navy);display:block;line-height:1.35}
+  .cheer .tx span{font-size:9.5px;color:var(--slate);font-weight:500;display:block;margin-top:3px;line-height:1.45}
+
+  /* composer */
+  .foot{flex:0 0 auto;padding:9px 12px;border-top:1px solid var(--line);background:#fff}
+  .quick{display:flex;gap:6px;margin-bottom:8px;overflow:hidden}
+  .quick .q{font-size:9.5px;font-weight:700;color:var(--blue-d);background:var(--blue-l);border:1px solid #d3e4ff;border-radius:999px;padding:5px 9px;display:flex;align-items:center;gap:4px;white-space:nowrap;flex:0 0 auto}
+  .quick .q svg{width:10px;height:10px}
+  .composer{display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px solid var(--line);border-radius:11px;padding:5px 5px 5px 12px}
+  .composer .ph{flex:1;font-size:11px;color:#9aa8ba;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .composer .send{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--blue),var(--blue-d));display:flex;align-items:center;justify-content:center;flex:0 0 32px;box-shadow:0 6px 12px -7px rgba(31,111,235,.7)}
+  .composer .send svg{width:15px;height:15px;color:#fff}
+
+  /* bottom tab nav */
+  .tabbar{flex:0 0 auto;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:6px 4px 7px}
+  .tab{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:8.5px;font-weight:600;color:var(--gray);flex:1}
+  .tab svg{width:19px;height:19px}
+  .tab.on{color:var(--blue)}
+</style>
+</head>
+<body>
+  <div class="screen">
+
+    <!-- TOP APP BAR -->
+    <div class="appbar">
+      <div class="brandmark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+      <div class="t">就活＠HCS<small>STUDENT</small></div>
+      <div class="bell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="dot"></span></div>
+      <div class="av">情</div>
+    </div>
+
+    <!-- AI HEADER -->
+    <div class="aihead">
+      <div class="ai"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg></div>
+      <div class="ti"><b>AIアシスタント</b><span>記載漏れや矛盾をチェック・添削</span></div>
+      <div class="ctx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>申請中</div>
+    </div>
+
+    <!-- SCROLL BODY -->
+    <div class="scroll">
+
+      <div class="msg ai">
+        <div class="a">AI</div>
+        <div class="bubble">情報太郎さん、作成中の申請を確認しました。気になる点が2件あります。
+          <div class="flag warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.3 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.3a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg><span><b>区分が重複。</b>6/2(月)「欠席3-4限」と「早退4限」が重なっています。</span></div>
+          <div class="flag warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.3 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.3a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg><span><b>締切日が未入力。</b>学校申込「有り」のとき必須です。</span></div>
+        </div>
+      </div>
+
+      <div class="msg me">
+        <div class="a">情</div>
+        <div class="bubble">ありがとう。所感の書き方も教えて？</div>
+      </div>
+
+      <div class="msg ai">
+        <div class="a">AI</div>
+        <div class="bubble">「事実→気づき→次の行動」の順でまとめると伝わりやすいです。
+          <div class="flag ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>申請日(5/29)とイベント日(6/2)の前後関係はOKです。</span></div>
+        </div>
+      </div>
+
+      <!-- check result card -->
+      <div class="card">
+        <div class="ph"><span class="bar"></span>事前チェック結果<span class="pill">要対応 2</span></div>
+        <div class="ck warn">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.3 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.3a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg></div>
+          <div class="tx"><b>同一日の区分が重複</b><span>6/2(月) 欠席3-4限 と 早退4限</span></div>
+        </div>
+        <div class="ck warn">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.3 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.3a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg></div>
+          <div class="tx"><b>申込締切日が未入力</b><span>学校申込「有り」は締切日が必須</span></div>
+        </div>
+        <div class="ck ok">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+          <div class="tx"><b>申請日とイベント日の整合</b><span>5/29 申請 → 6/2 実施で適切</span></div>
+        </div>
+        <div class="ck ok">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+          <div class="tx"><b>必須項目の入力</b><span>企業名・日時・場所・形態 入力済</span></div>
+        </div>
+      </div>
+
+      <!-- activity viz card -->
+      <div class="card">
+        <div class="ph"><span class="bar"></span>活動実績の可視化</div>
+        <div class="viz">
+          <div class="ring-row">
+            <div class="ring"><div class="c"><b>18</b><span>活動件数</span></div></div>
+            <div class="stats2">
+              <div class="v2"><div class="l"><i style="background:var(--blue)"></i>申請・実施済</div><div class="n">13</div></div>
+              <div class="v2"><div class="l"><i style="background:var(--warn)"></i>承認待ち</div><div class="n">3</div></div>
+              <div class="v2"><div class="l"><i style="background:var(--ok)"></i>受験報告 提出</div><div class="n">9</div></div>
+              <div class="v2"><div class="l"><i style="background:var(--purple)"></i>受験企業数</div><div class="n">7社</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- cheer card -->
+      <div class="card">
+        <div class="cheer">
+          <div class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21 8 14 2 9.4h7.6z"/></svg></div>
+          <div class="tx"><b>今月は活動が4件増加。</b><span>このペースで継続できています。応援しています。</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- COMPOSER -->
+    <div class="foot">
+      <div class="quick">
+        <span class="q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>申請をチェック</span>
+        <span class="q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>所感を添削</span>
+      </div>
+      <div class="composer">
+        <span class="ph">AIに相談する内容を入力…</span>
+        <div class="send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></div>
+      </div>
+    </div>
+
+    <!-- BOTTOM TAB -->
+    <div class="tabbar">
+      <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>申請一覧</div>
+      <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 15l2 2 4-4"/></svg>活動報告</div>
+      <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>受験報告</div>
+      <div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg>AIアシスト</div>
+    </div>
+
+  </div>
+</body>
+</html>

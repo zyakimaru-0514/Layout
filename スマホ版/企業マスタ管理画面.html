@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V206 企業マスタ管理画面（スマホ版 320×568）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --navy:#0f2c52; --blue:#1f6feb; --lblue:#e8f1ff; --bg:#eef2f7;
+    --success:#1f9d55; --warn:#d9822b; --danger:#d64545;
+    --line:#d7e0ec; --text:#1c2b40; --sub:#64748b;
+  }
+  html,body{background:#5a6678;}
+  body{font-family:"Noto Sans JP",sans-serif;display:flex;justify-content:center;align-items:flex-start;padding:30px;}
+  .screen{width:320px;height:568px;background:var(--bg);overflow:hidden;position:relative;
+    display:flex;flex-direction:column;color:var(--text);}
+
+  /* top app bar */
+  .appbar{flex:0 0 auto;background:var(--navy);color:#fff;padding:10px 14px;display:flex;align-items:center;gap:10px;}
+  .appbar .logo{width:30px;height:30px;border-radius:8px;background:var(--blue);display:flex;align-items:center;justify-content:center;flex:0 0 30px;}
+  .appbar .logo svg{width:17px;height:17px;color:#fff;}
+  .appbar .t{flex:1;}
+  .appbar .t b{font-family:"Zen Kaku Gothic New";font-weight:700;font-size:14px;display:block;line-height:1.1;}
+  .appbar .t small{font-size:8.5px;color:#9db8e0;letter-spacing:.06em;}
+  .appbar .bell{width:30px;height:30px;border-radius:9px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;position:relative;}
+  .appbar .bell svg{width:15px;height:15px;color:#fff;}
+  .appbar .bell .dot{position:absolute;top:4px;right:4px;min-width:13px;height:13px;padding:0 3px;background:var(--danger);border-radius:7px;color:#fff;font-size:8px;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--navy);}
+  .appbar .av{width:30px;height:30px;border-radius:9px;background:var(--navy);border:1.5px solid #2a4a7a;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;font-family:"Zen Kaku Gothic New";}
+
+  /* page head */
+  .pghead{flex:0 0 auto;background:#fff;border-bottom:1px solid var(--line);padding:9px 13px;}
+  .pghead .row1{display:flex;align-items:center;gap:8px;}
+  .pghead .ttl{font-family:"Zen Kaku Gothic New";font-weight:700;font-size:15px;color:var(--navy);display:flex;align-items:center;gap:7px;flex:1;}
+  .pghead .ttl .bar{width:3px;height:15px;border-radius:2px;background:var(--blue);}
+  .pghead .ttl small{font-size:9px;color:var(--sub);font-weight:500;font-family:"Noto Sans JP";}
+  .pghead .root{display:flex;align-items:center;gap:4px;font-size:8.5px;font-weight:700;color:#fff;background:var(--warn);padding:4px 8px;border-radius:999px;}
+  .pghead .root svg{width:10px;height:10px;}
+  .pghead .search{margin-top:9px;height:36px;background:var(--bg);border:1.5px solid var(--line);border-radius:10px;display:flex;align-items:center;gap:8px;padding:0 11px;}
+  .pghead .search svg{width:14px;height:14px;color:var(--sub);}
+  .pghead .search .ph{font-size:11px;color:#9aa8ba;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+  /* summary chips */
+  .sumrow{flex:0 0 auto;background:#fff;border-bottom:1px solid var(--line);display:flex;gap:7px;padding:0 12px 10px;}
+  .sum{flex:1;border:1px solid var(--line);border-radius:9px;padding:7px 8px;border-top-width:3px;}
+  .sum.n{border-top-color:var(--navy);}
+  .sum.s{border-top-color:var(--success);}
+  .sum.w{border-top-color:var(--warn);}
+  .sum.d{border-top-color:var(--danger);}
+  .sum .lb{font-size:8.5px;color:var(--sub);font-weight:500;white-space:nowrap;}
+  .sum .nm{font-family:"Zen Kaku Gothic New";font-weight:700;font-size:16px;color:var(--navy);line-height:1.1;margin-top:2px;}
+  .sum .nm small{font-size:9px;font-weight:500;color:var(--sub);margin-left:1px;}
+
+  /* filter tabs */
+  .tabs{flex:0 0 auto;background:#fff;border-bottom:1px solid var(--line);display:flex;gap:5px;padding:8px 12px;overflow:hidden;}
+  .tabs .tab{font-size:11px;font-weight:700;color:var(--sub);padding:6px 11px;border-radius:999px;background:#eef1f6;white-space:nowrap;flex:0 0 auto;}
+  .tabs .tab.on{background:var(--navy);color:#fff;}
+
+  /* scroll list */
+  .scroll{flex:1;overflow:hidden;padding:11px 12px;display:flex;flex-direction:column;gap:10px;}
+
+  .ccard{background:#fff;border:1px solid var(--line);border-radius:13px;box-shadow:0 1px 3px rgba(15,44,82,.05);padding:11px 12px;}
+  .ccard .top{display:flex;align-items:flex-start;gap:9px;}
+  .ccard .cinfo{flex:1;min-width:0;}
+  .ccard .cid{font-family:monospace;font-size:9.5px;color:var(--sub);}
+  .ccard .cname{font-family:"Zen Kaku Gothic New";font-weight:700;font-size:13px;color:var(--text);line-height:1.3;margin-top:1px;}
+  .ccard .st{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:10.5px;flex:0 0 auto;}
+  .ccard .st::before{content:"";width:7px;height:7px;border-radius:50%;}
+  .st-on{color:var(--success);} .st-on::before{background:var(--success);}
+  .st-off{color:var(--sub);} .st-off::before{background:#aab6c6;}
+
+  .ccard .loc{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--sub);margin-top:7px;}
+  .ccard .loc svg{width:12px;height:12px;flex:0 0 12px;}
+
+  .ccard .tags{display:flex;gap:6px;margin-top:8px;}
+  .biz,.reg{display:inline-block;padding:3px 9px;border-radius:6px;font-size:10px;font-weight:700;}
+  .biz-it{background:#e8f1ff;color:#1f6feb;}
+  .biz-other{background:#eef2f7;color:#64748b;}
+  .reg-formal{background:#eef7ee;color:#1f9d55;}
+  .reg-temp{background:#fdf1e6;color:#d9822b;}
+
+  .ccard .acts{display:flex;gap:7px;margin-top:10px;padding-top:9px;border-top:1px solid #eef2f7;}
+  .ccard .acts button{flex:1;height:33px;border-radius:8px;font-size:11.5px;font-weight:700;font-family:"Noto Sans JP";cursor:pointer;border:1px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;gap:5px;}
+  .ccard .acts .a-edit{border-color:var(--blue);color:var(--blue);}
+  .ccard .acts .a-disable{border-color:var(--danger);color:var(--danger);}
+  .ccard .acts .a-enable{border-color:var(--success);color:var(--success);}
+  .ccard .acts svg{width:13px;height:13px;}
+
+  /* FAB add */
+  .fab{position:absolute;right:14px;bottom:64px;width:50px;height:50px;border-radius:16px;background:var(--navy);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 20px -8px rgba(15,44,82,.7);z-index:5;}
+  .fab svg{width:24px;height:24px;color:#fff;}
+
+  /* bottom tab nav */
+  .tabbar{flex:0 0 auto;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:6px 4px 7px;}
+  .tab-i{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:8.5px;font-weight:600;color:#94a3b8;flex:1;}
+  .tab-i svg{width:18px;height:18px;}
+  .tab-i.on{color:var(--blue);}
+</style>
+</head>
+<body>
+  <div class="screen">
+
+    <!-- TOP APP BAR -->
+    <div class="appbar">
+      <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+      <div class="t"><b>就活＠HCS</b><small>ADMIN CONSOLE</small></div>
+      <div class="bell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="dot">2</span></div>
+      <div class="av">管</div>
+    </div>
+
+    <!-- PAGE HEAD -->
+    <div class="pghead">
+      <div class="row1">
+        <div class="ttl"><span class="bar"></span>企業マスタ管理 <small>V206</small></div>
+        <div class="root"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>ROOT</div>
+      </div>
+      <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><span class="ph">企業名・所在地で検索</span></div>
+    </div>
+
+    <!-- SUMMARY CHIPS -->
+    <div class="sumrow">
+      <div class="sum n"><div class="lb">登録企業</div><div class="nm">1,284<small>社</small></div></div>
+      <div class="sum s"><div class="lb">有効</div><div class="nm">1,251<small>社</small></div></div>
+      <div class="sum w"><div class="lb">仮登録</div><div class="nm">7<small>社</small></div></div>
+      <div class="sum d"><div class="lb">無効</div><div class="nm">33<small>社</small></div></div>
+    </div>
+
+    <!-- FILTER TABS -->
+    <div class="tabs">
+      <span class="tab on">すべて</span>
+      <span class="tab">IT</span>
+      <span class="tab">その他</span>
+      <span class="tab">仮登録</span>
+      <span class="tab">無効</span>
+    </div>
+
+    <!-- SCROLL LIST -->
+    <div class="scroll">
+
+      <div class="ccard">
+        <div class="top">
+          <div class="cinfo">
+            <div class="cid">000001</div>
+            <div class="cname">株式会社つうけんアドバンスシステムズ</div>
+          </div>
+          <span class="st st-on">有効</span>
+        </div>
+        <div class="loc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>北海道札幌市中央区</div>
+        <div class="tags"><span class="biz biz-it">IT</span><span class="reg reg-formal">正式</span></div>
+        <div class="acts">
+          <button class="a-edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>変更</button>
+          <button class="a-disable"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>無効化</button>
+        </div>
+      </div>
+
+      <div class="ccard">
+        <div class="top">
+          <div class="cinfo">
+            <div class="cid">000003</div>
+            <div class="cname">株式会社IIJプロテック</div>
+          </div>
+          <span class="st st-on">有効</span>
+        </div>
+        <div class="loc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>東京都千代田区</div>
+        <div class="tags"><span class="biz biz-it">IT</span><span class="reg reg-formal">正式</span></div>
+        <div class="acts">
+          <button class="a-edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>変更</button>
+          <button class="a-disable"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>無効化</button>
+        </div>
+      </div>
+
+      <div class="ccard">
+        <div class="top">
+          <div class="cinfo">
+            <div class="cid">000047</div>
+            <div class="cname">株式会社メディア・マジック</div>
+          </div>
+          <span class="st st-on">有効</span>
+        </div>
+        <div class="loc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>北海道札幌市中央区</div>
+        <div class="tags"><span class="biz biz-it">IT</span><span class="reg reg-temp">仮登録</span></div>
+        <div class="acts">
+          <button class="a-edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>変更</button>
+          <button class="a-disable"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>無効化</button>
+        </div>
+      </div>
+
+      <div class="ccard">
+        <div class="top">
+          <div class="cinfo">
+            <div class="cid">000061</div>
+            <div class="cname">株式会社オカモト</div>
+          </div>
+          <span class="st st-on">有効</span>
+        </div>
+        <div class="loc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>北海道河東郡音更町</div>
+        <div class="tags"><span class="biz biz-other">その他</span><span class="reg reg-formal">正式</span></div>
+        <div class="acts">
+          <button class="a-edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>変更</button>
+          <button class="a-disable"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>無効化</button>
+        </div>
+      </div>
+
+      <div class="ccard">
+        <div class="top">
+          <div class="cinfo">
+            <div class="cid">000072</div>
+            <div class="cname">株式会社流研</div>
+          </div>
+          <span class="st st-off">無効</span>
+        </div>
+        <div class="loc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>北海道札幌市豊平区</div>
+        <div class="tags"><span class="biz biz-it">IT</span><span class="reg reg-formal">正式</span></div>
+        <div class="acts">
+          <button class="a-edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>変更</button>
+          <button class="a-enable"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>有効化</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- FAB 企業を追加 -->
+    <div class="fab"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></div>
+
+    <!-- BOTTOM TAB -->
+    <div class="tabbar">
+      <div class="tab-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>申請一覧</div>
+      <div class="tab-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h12"/></svg>受験報告</div>
+      <div class="tab-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 12 0v1"/></svg>ユーザ</div>
+      <div class="tab-i on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg>企業</div>
+    </div>
+
+  </div>
+</body>
+</html>

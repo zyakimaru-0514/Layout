@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V201 活動報告画面（スマホ版 320×568）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --navy:#0f2c52; --blue:#1f6feb; --lblue:#e8f1ff; --bg:#eef2f7;
+    --success:#1f9d55; --warn:#d9822b; --danger:#d64545;
+    --line:#d7e0ec; --text:#1c2b40; --sub:#64748b;
+  }
+  html,body{background:#5a6678;}
+  body{font-family:"Noto Sans JP",sans-serif;display:flex;justify-content:center;align-items:flex-start;padding:30px;}
+  .screen{width:320px;height:568px;background:var(--bg);overflow:hidden;position:relative;
+    display:flex;flex-direction:column;color:var(--text);}
+  .brand,.sec-ttl,.page-ttl,.ai-ttl{font-family:"Zen Kaku Gothic New",sans-serif;}
+
+  /* top app bar */
+  .appbar{flex:0 0 auto;background:var(--navy);color:#fff;padding:10px 14px;display:flex;align-items:center;gap:10px;}
+  .appbar .logo{width:30px;height:30px;border-radius:8px;background:var(--blue);display:flex;align-items:center;justify-content:center;flex:0 0 30px;}
+  .appbar .logo svg{width:17px;height:17px;color:#fff;}
+  .appbar .t{flex:1;}
+  .appbar .t b{font-family:"Zen Kaku Gothic New";font-weight:700;font-size:14px;display:block;line-height:1.1;}
+  .appbar .t small{font-size:8.5px;color:#9db8e0;letter-spacing:.06em;}
+  .appbar .bell{width:30px;height:30px;border-radius:9px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;position:relative;}
+  .appbar .bell svg{width:15px;height:15px;color:#fff;}
+  .appbar .bell .dot{position:absolute;top:4px;right:4px;min-width:13px;height:13px;padding:0 3px;background:var(--danger);border-radius:7px;color:#fff;font-size:8px;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--navy);}
+  .appbar .av{width:30px;height:30px;border-radius:9px;background:var(--lblue);color:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;font-family:"Zen Kaku Gothic New";}
+
+  /* page head */
+  .pghead{flex:0 0 auto;background:#fff;border-bottom:1px solid var(--line);padding:9px 13px;display:flex;align-items:center;gap:8px;}
+  .pghead .ttl{font-family:"Zen Kaku Gothic New";font-weight:700;font-size:15px;color:var(--navy);display:flex;align-items:center;gap:7px;flex:1;}
+  .pghead .ttl .bar{width:3px;height:15px;border-radius:2px;background:var(--blue);}
+  .pghead .ttl small{font-size:9px;color:var(--sub);font-weight:500;font-family:"Noto Sans JP";}
+  .pghead .status{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:var(--warn);background:#fdf1e6;padding:4px 9px;border-radius:999px;}
+  .pghead .status::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--warn);}
+
+  /* scroll body */
+  .scroll{flex:1;overflow:hidden;padding:11px 12px;display:flex;flex-direction:column;gap:12px;}
+
+  /* 申請情報サマリ */
+  .summary{background:#f8fafd;border:1px solid var(--line);border-radius:12px;padding:11px 13px;}
+  .summary .row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;}
+  .summary .row+.row{border-top:1px solid #e7eef7;}
+  .summary .lbl{font-size:10.5px;color:var(--sub);font-weight:500;}
+  .summary .val{font-size:12px;font-weight:700;color:var(--text);text-align:right;}
+  .summary .val.cid{font-family:monospace;font-weight:500;}
+  .badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;}
+  .b-mensetsu{background:#fdf1e6;color:#d9822b;}
+
+  /* fields */
+  .field-label{font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px;display:flex;align-items:center;gap:7px;}
+  .req{font-size:9px;background:var(--danger);color:#fff;padding:2px 6px;border-radius:4px;font-weight:700;}
+  textarea{width:100%;border:1px solid var(--line);border-radius:9px;padding:9px 11px;
+    font-size:12px;font-family:"Noto Sans JP";color:var(--text);resize:none;line-height:1.55;background:#fff;}
+  textarea::placeholder{color:#a7b4c6;}
+
+  /* 受験報告 */
+  .exam-box{border:1px dashed var(--blue);background:#f5f9ff;border-radius:11px;padding:11px 12px;}
+  .exam-box .et{font-size:10px;font-weight:700;color:var(--blue);margin-bottom:9px;display:flex;align-items:flex-start;gap:6px;line-height:1.45;}
+  .exam-box .et svg{width:13px;height:13px;flex:0 0 13px;margin-top:1px;}
+  .result-choice{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;}
+  .result-choice label{border:1.5px solid var(--line);border-radius:8px;padding:9px 8px;text-align:center;
+    font-size:11.5px;font-weight:700;cursor:pointer;background:#fff;}
+  .result-choice label.on-success{border-color:var(--success);background:#eef7ee;color:var(--success);}
+
+  /* 今後の予定 */
+  .choice{display:flex;gap:8px;}
+  .choice label{flex:1;border:1.5px solid var(--line);border-radius:9px;padding:10px 10px;cursor:pointer;background:#fff;}
+  .choice label.on{border-color:var(--blue);background:var(--lblue);}
+  .choice .ttl2{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--text);}
+  .choice label.on .ttl2{color:var(--navy);}
+  .choice .radio{width:16px;height:16px;border-radius:50%;border:2px solid #b8c6d8;flex:0 0 16px;}
+  .choice label.on .radio{border-color:var(--blue);background:radial-gradient(var(--blue) 40%,#fff 45%);}
+  .choice .sub{font-size:9.5px;color:var(--sub);font-weight:500;margin-top:4px;padding-left:24px;line-height:1.4;}
+
+  /* card wrapper for form sections */
+  .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 13px;}
+  .card .sec-ttl{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:11px;display:flex;align-items:center;gap:7px;}
+  .card .sec-ttl .bar{width:3px;height:13px;border-radius:2px;background:var(--blue);}
+  .blk+.blk{margin-top:14px;}
+
+  /* AI mini */
+  .ai-card{background:linear-gradient(135deg,#0f2c52,#1f6feb);color:#fff;border-radius:12px;padding:12px 13px;display:flex;align-items:center;gap:11px;}
+  .ai-card .ic{width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;flex:0 0 34px;}
+  .ai-card .ic svg{width:18px;height:18px;color:#fff;}
+  .ai-card .tx{flex:1;min-width:0;}
+  .ai-card .tx b{font-family:"Zen Kaku Gothic New";font-weight:700;font-size:12.5px;display:block;}
+  .ai-card .tx span{font-size:9.5px;color:#dce8fb;display:block;margin-top:2px;line-height:1.4;}
+  .ai-card .go{flex:0 0 auto;background:#fff;color:var(--navy);font-size:10.5px;font-weight:700;border:none;border-radius:8px;padding:8px 12px;font-family:"Noto Sans JP";}
+
+  /* sticky footer actions */
+  .foot{flex:0 0 auto;background:#fff;border-top:1px solid var(--line);padding:9px 12px;display:flex;gap:9px;}
+  .btn{flex:1;height:42px;border:none;border-radius:10px;font-size:13px;font-weight:700;font-family:"Noto Sans JP";display:flex;align-items:center;justify-content:center;gap:7px;}
+  .btn svg{width:15px;height:15px;}
+  .btn-ghost{flex:0 0 96px;background:#fff;color:var(--sub);border:1.5px solid var(--line);}
+  .btn-primary{background:var(--blue);color:#fff;box-shadow:0 5px 12px rgba(31,111,235,.3);}
+
+  /* bottom tab */
+  .tabbar{flex:0 0 auto;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:6px 4px 7px;}
+  .tab-i{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:8.5px;font-weight:600;color:#94a3b8;flex:1;}
+  .tab-i svg{width:18px;height:18px;}
+  .tab-i.on{color:var(--blue);}
+</style>
+</head>
+<body>
+  <div class="screen">
+
+    <!-- TOP APP BAR -->
+    <div class="appbar">
+      <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+      <div class="t"><b>就活＠HCS</b><small>STUDENT</small></div>
+      <div class="bell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="dot">3</span></div>
+      <div class="av">情</div>
+    </div>
+
+    <!-- PAGE HEAD -->
+    <div class="pghead">
+      <div class="ttl"><span class="bar"></span>活動報告 <small>V201</small></div>
+      <span class="status">未報告</span>
+    </div>
+
+    <!-- SCROLL BODY -->
+    <div class="scroll">
+
+      <!-- 申請情報サマリ（自動入力・読み取り） -->
+      <div class="summary">
+        <div class="row"><span class="lbl">申請ID</span><span class="val cid">000000010</span></div>
+        <div class="row"><span class="lbl">イベント区分</span><span class="val"><span class="badge b-mensetsu">面接</span></span></div>
+        <div class="row"><span class="lbl">企業名</span><span class="val">株式会社IIJプロテック</span></div>
+        <div class="row"><span class="lbl">実施日時</span><span class="val">2026/05/28 14:00</span></div>
+      </div>
+
+      <!-- 報告フォーム -->
+      <div class="card">
+        <div class="sec-ttl"><span class="bar"></span>活動内容を報告する</div>
+
+        <div class="blk">
+          <div class="field-label">活動内容<span class="req">必須</span></div>
+          <textarea rows="3" placeholder="実施した就職活動の内容を入力（面接内容・説明会の内容など）"></textarea>
+        </div>
+
+        <div class="blk">
+          <div class="field-label">所感・メモ<span class="req">必須</span></div>
+          <textarea rows="2" placeholder="感じたこと、次回に向けたメモなどを入力"></textarea>
+        </div>
+      </div>
+
+      <!-- 受験報告（試験区分=面接のため表示） -->
+      <div class="exam-box">
+        <div class="et"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>受験報告：試験区分の活動のため、選考結果の入力が必要です</div>
+        <div class="field-label" style="font-size:11px;">選考結果<span class="req">必須</span></div>
+        <div class="result-choice">
+          <label class="on-success">合格・継続</label>
+          <label>内定</label>
+          <label>内定辞退</label>
+          <label>不合格</label>
+        </div>
+      </div>
+
+      <!-- 今後の予定（C203） -->
+      <div class="card">
+        <div class="field-label">今後の予定<span class="req">必須</span></div>
+        <div class="choice">
+          <label class="on">
+            <div class="ttl2"><span class="radio"></span>進める</div>
+            <div class="sub">次回の申請を登録</div>
+          </label>
+          <label>
+            <div class="ttl2"><span class="radio"></span>進めない</div>
+            <div class="sub">活動を終了</div>
+          </label>
+        </div>
+      </div>
+
+      <!-- AIアシスト -->
+      <div class="ai-card">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg></div>
+        <div class="tx"><b>AIアシスト</b><span>送信前に記載漏れ・矛盾をチェック</span></div>
+        <button class="go">相談する</button>
+      </div>
+
+      <!-- 報告期限の注意 -->
+      <div class="card">
+        <div class="field-label" style="margin-bottom:6px;">報告期限</div>
+        <p style="font-size:10.5px;color:var(--sub);line-height:1.6;">原則イベント当日に報告してください。未報告の場合、翌日9時にリマインド通知が送信されます。</p>
+      </div>
+
+    </div>
+
+    <!-- STICKY FOOTER -->
+    <div class="foot">
+      <button class="btn btn-ghost">一時保存</button>
+      <button class="btn btn-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>報告する</button>
+    </div>
+
+    <!-- BOTTOM TAB -->
+    <div class="tabbar">
+      <div class="tab-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>申請一覧</div>
+      <div class="tab-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>新規申請</div>
+      <div class="tab-i on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v4H4zM4 12h10M4 18h7"/></svg>活動報告</div>
+      <div class="tab-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>受験報告</div>
+      <div class="tab-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>AI相談</div>
+    </div>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>就活＠HCS 教員用トップ画面（スマホ版 320×568）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0f2c52; --navy-2:#16386b; --blue:#1f6feb; --blue-d:#1559c0;
+    --blue-l:#e8f1ff; --sky:#4d94ff; --ink:#1a2533; --slate:#5b6b80;
+    --line:#e2e8f1; --bg:#eef2f7; --card:#ffffff;
+    --ok:#1f9d55; --ok-bg:#e6f6ed; --warn:#d9822b; --warn-bg:#fdf1e3;
+    --danger:#d64545; --danger-bg:#fbeaea; --gray:#8696aa; --gray-bg:#eef1f5;
+    --purple:#6b4fd8; --purple-bg:#efeafd;
+    --shadow-sm:0 2px 8px -2px rgba(15,44,82,.14);
+    --font:'Noto Sans JP',sans-serif; --display:'Zen Kaku Gothic New','Noto Sans JP',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#cfd8e6}
+  body{font-family:var(--font);color:var(--ink);-webkit-font-smoothing:antialiased;display:flex;justify-content:center;align-items:flex-start;padding:30px}
+  .screen{width:320px;height:568px;flex:0 0 auto;position:relative;overflow:hidden;background:var(--bg);display:flex;flex-direction:column}
+
+  /* top app bar */
+  .appbar{flex:0 0 auto;background:var(--navy);color:#fff;padding:10px 14px;display:flex;align-items:center;gap:10px}
+  .appbar .logo{width:30px;height:30px;border-radius:8px;background:linear-gradient(150deg,var(--sky),var(--blue) 55%,var(--navy-2));display:flex;align-items:center;justify-content:center;flex:0 0 30px}
+  .appbar .logo svg{width:17px;height:17px;color:#fff}
+  .appbar .t{flex:1}
+  .appbar .t b{font-family:var(--display);font-weight:900;font-size:14px;display:block;line-height:1.1}
+  .appbar .t small{font-size:8.5px;color:#9db8e0;letter-spacing:.06em}
+  .appbar .bell{width:30px;height:30px;border-radius:9px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;position:relative}
+  .appbar .bell svg{width:15px;height:15px;color:#fff}
+  .appbar .bell .dot{position:absolute;top:6px;right:6px;width:6px;height:6px;border-radius:50%;background:var(--warn);border:1.5px solid var(--navy)}
+  .appbar .av{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--sky),var(--blue));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;color:#fff}
+
+  /* greet strip */
+  .greet{flex:0 0 auto;background:#fff;border-bottom:1px solid var(--line);padding:9px 13px}
+  .greet h2{font-family:var(--display);font-weight:900;font-size:14px;color:var(--navy)}
+  .greet h2 span{color:var(--blue)}
+  .greet p{font-size:10px;color:var(--slate);font-weight:500;margin-top:3px}
+  .greet .date{font-size:9px;color:var(--slate);font-weight:600}
+
+  /* scroll body */
+  .scroll{flex:1;overflow:hidden;padding:11px 12px;display:flex;flex-direction:column;gap:11px}
+
+  /* stat chips 2x2 */
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 11px;display:flex;align-items:center;gap:9px;box-shadow:var(--shadow-sm)}
+  .stat .ic{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex:0 0 32px}
+  .stat .ic svg{width:18px;height:18px}
+  .stat.c1 .ic{background:var(--warn-bg);color:var(--warn)}
+  .stat.c2 .ic{background:var(--blue-l);color:var(--blue)}
+  .stat.c3 .ic{background:var(--purple-bg);color:var(--purple)}
+  .stat.c4 .ic{background:var(--ok-bg);color:var(--ok)}
+  .stat .num{font-family:var(--display);font-weight:900;font-size:19px;color:var(--navy);line-height:1}
+  .stat .num small{font-size:10px;font-weight:700;color:var(--slate);margin-left:2px}
+  .stat .lb{font-size:9px;color:var(--slate);font-weight:600;margin-top:3px;line-height:1.2}
+
+  /* panel */
+  .panel{background:#fff;border:1px solid var(--line);border-radius:13px;box-shadow:var(--shadow-sm);overflow:hidden}
+  .panel .ph{display:flex;align-items:center;gap:8px;padding:10px 13px;border-bottom:1px solid var(--line)}
+  .panel .ph .h{font-family:var(--display);font-weight:900;font-size:12.5px;color:var(--navy);display:flex;align-items:center;gap:7px;flex:1}
+  .panel .ph .h .bar{width:3px;height:13px;border-radius:2px;background:var(--blue)}
+  .badge{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;font-weight:700;padding:4px 9px;border-radius:999px;line-height:1;white-space:nowrap}
+  .badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+  .b-ok{color:var(--ok);background:var(--ok-bg)} .b-warn{color:var(--warn);background:var(--warn-bg)}
+  .b-info{color:var(--blue);background:var(--blue-l)}
+
+  /* approval cards */
+  .appr{padding:4px 0}
+  .ar{padding:10px 13px}
+  .ar+.ar{border-top:1px solid var(--line)}
+  .ar .top{display:flex;align-items:center;gap:9px}
+  .ar .a{width:32px;height:32px;border-radius:9px;background:var(--blue-l);color:var(--blue-d);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;flex:0 0 32px}
+  .ar .nm{flex:1;min-width:0}
+  .ar .nm b{font-size:12.5px;font-weight:700;color:var(--ink);display:block;line-height:1.2}
+  .ar .nm span{font-size:9.5px;color:var(--gray);font-weight:600}
+  .ev{font-size:9.5px;font-weight:700;padding:4px 9px;border-radius:7px;background:var(--blue-l);color:var(--blue-d);white-space:nowrap;flex:0 0 auto}
+  .ar .co{font-size:11px;font-weight:700;color:var(--ink);margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ar .dt{font-size:9.5px;color:var(--slate);font-weight:500;margin-top:3px}
+  .ar .acts{display:flex;gap:7px;margin-top:9px}
+  .ar .acts button{height:32px;border-radius:8px;font-size:11px;font-weight:700;font-family:var(--font);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;border:none}
+  .ar .acts .ok{flex:1;background:var(--ok);color:#fff}
+  .ar .acts .rej{flex:1;background:#fff;color:var(--danger);border:1.5px solid var(--danger-bg)}
+  .ar .acts .view{flex:0 0 38px;background:var(--bg);color:var(--slate)}
+  .ar .acts svg{width:14px;height:14px}
+
+  /* mini rows */
+  .mr{display:flex;align-items:center;gap:10px;padding:8px 13px}
+  .mr+.mr{border-top:1px solid var(--line)}
+  .mr .a{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;flex:0 0 30px;background:var(--ok-bg);color:var(--ok)}
+  .mr .a.w{background:var(--warn-bg);color:var(--warn)}
+  .mr .tx{flex:1;min-width:0}
+  .mr .tx b{font-size:11.5px;font-weight:700;color:var(--ink);display:block}
+  .mr .tx span{font-size:9px;color:var(--slate);font-weight:500;display:block;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mr .t{font-size:10.5px;font-weight:700;color:var(--slate);flex:0 0 auto}
+  .remind{font-size:9.5px;font-weight:700;color:var(--warn);background:var(--warn-bg);border-radius:7px;padding:4px 9px;flex:0 0 auto}
+
+  /* bars */
+  .bars{padding:11px 13px;display:flex;flex-direction:column;gap:8px}
+  .barline{display:flex;align-items:center;gap:9px}
+  .barline .nm{font-size:10.5px;font-weight:600;color:var(--slate);width:62px;flex:0 0 62px}
+  .barline .track{flex:1;height:9px;background:var(--bg);border-radius:5px;overflow:hidden}
+  .barline .fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--sky),var(--blue))}
+  .barline .v{font-size:11px;font-weight:800;color:var(--navy);width:24px;text-align:right;flex:0 0 24px}
+
+  /* donut */
+  .donut-wrap{padding:11px 13px;display:flex;align-items:center;gap:14px}
+  .donut{width:80px;height:80px;border-radius:50%;flex:0 0 80px;background:conic-gradient(var(--ok) 0 55%,var(--blue) 55% 78%,var(--warn) 78% 90%,var(--danger) 90% 100%);position:relative;display:flex;align-items:center;justify-content:center}
+  .donut::after{content:"";position:absolute;width:50px;height:50px;border-radius:50%;background:#fff}
+  .donut .c{position:relative;z-index:2;text-align:center}
+  .donut .c b{font-family:var(--display);font-weight:900;font-size:18px;color:var(--navy);display:block;line-height:1}
+  .donut .c span{font-size:9px;color:var(--gray);font-weight:600}
+  .legend{display:flex;flex-direction:column;gap:6px;flex:1}
+  .legend .lg{display:flex;align-items:center;gap:7px;font-size:10px;font-weight:600;color:var(--slate)}
+  .legend .lg i{width:9px;height:9px;border-radius:3px;flex:0 0 9px}
+
+  /* export */
+  .export{padding:12px 13px;background:linear-gradient(155deg,#fff,#f4f8ff)}
+  .export .x-h{font-family:var(--display);font-weight:900;font-size:12.5px;color:var(--navy);display:flex;align-items:center;gap:7px}
+  .export .x-h .bar{width:3px;height:13px;border-radius:2px;background:var(--blue)}
+  .export .x-p{font-size:9.5px;color:var(--slate);font-weight:500;line-height:1.5;margin-top:7px}
+  .export .x-btns{display:flex;gap:8px;margin-top:10px}
+  .btn{flex:1;height:38px;border-radius:10px;border:none;cursor:pointer;font-family:var(--font);font-weight:700;font-size:11.5px;display:flex;align-items:center;justify-content:center;gap:6px}
+  .btn svg{width:14px;height:14px}
+  .btn.solid{background:linear-gradient(135deg,var(--blue),var(--blue-d));color:#fff}
+  .btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--line)}
+
+  /* bottom tab nav */
+  .tabbar{flex:0 0 auto;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:6px 4px 7px}
+  .tab-i{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:8.5px;font-weight:600;color:#94a3b8;flex:1;position:relative}
+  .tab-i svg{width:18px;height:18px}
+  .tab-i.on{color:var(--blue)}
+  .tab-i .ct{position:absolute;top:-2px;right:50%;margin-right:-22px;font-size:8px;font-weight:800;background:var(--warn);color:#fff;border-radius:999px;padding:1px 5px;line-height:1.3}
+</style>
+</head>
+<body>
+  <div class="screen">
+
+    <!-- TOP APP BAR -->
+    <div class="appbar">
+      <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+      <div class="t"><b>就活＠HCS</b><small>TEACHER CONSOLE</small></div>
+      <div class="bell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="dot"></span></div>
+      <div class="av">権</div>
+    </div>
+
+    <!-- GREET STRIP -->
+    <div class="greet">
+      <h2>おはようございます、<span>権藤先生</span></h2>
+      <p>承認待ち 4 件、報告未提出 3 名 ・ <span class="date">2026年5月28日（水）</span></p>
+    </div>
+
+    <!-- SCROLL BODY -->
+    <div class="scroll">
+
+      <!-- STAT CHIPS -->
+      <div class="stats">
+        <div class="stat c1"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg></div><div><div class="num">4<small>件</small></div><div class="lb">承認待ち</div></div></div>
+        <div class="stat c2"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg></div><div><div class="num">8<small>名</small></div><div class="lb">本日の活動者</div></div></div>
+        <div class="stat c3"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div><div><div class="num">3<small>名</small></div><div class="lb">報告未提出</div></div></div>
+        <div class="stat c4"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></div><div><div class="num">42<small>社</small></div><div class="lb">受験企業数(累計)</div></div></div>
+      </div>
+
+      <!-- APPROVAL -->
+      <div class="panel">
+        <div class="ph"><div class="h"><span class="bar"></span>承認待ちの申請</div><span class="badge b-warn">4件</span></div>
+        <div class="appr">
+          <div class="ar">
+            <div class="top">
+              <div class="a">情</div>
+              <div class="nm"><b>情報太郎</b><span>S3A201</span></div>
+              <span class="ev">説明会(単独)</span>
+            </div>
+            <div class="co">株式会社ほくしん情報システム</div>
+            <div class="dt">6/2(月) 10:00〜12:00 ・ 市内 ・ 欠席3-4限</div>
+            <div class="acts">
+              <button class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>承認</button>
+              <button class="rej"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14l6-6M15 14L9 8"/></svg>差戻し</button>
+              <button class="view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            </div>
+          </div>
+          <div class="ar">
+            <div class="top">
+              <div class="a">情</div>
+              <div class="nm"><b>情報花子</b><span>S3A208</span></div>
+              <span class="ev">面接</span>
+            </div>
+            <div class="co">テック・フロンティア株式会社</div>
+            <div class="dt">6/3(火) 13:30〜15:00 ・ 道内 ・ 早退5限 ・ <span style="color:var(--blue);font-weight:700">コース期間</span></div>
+            <div class="acts">
+              <button class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>承認</button>
+              <button class="rej"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14l6-6M15 14L9 8"/></svg>差戻し</button>
+              <button class="view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            </div>
+          </div>
+          <div class="ar">
+            <div class="top">
+              <div class="a">基</div>
+              <div class="nm"><b>基本太郎</b><span>S3A203</span></div>
+              <span class="ev">筆記</span>
+            </div>
+            <div class="co">合同会社ノースデータラボ</div>
+            <div class="dt">5/30(金) 09:00〜11:30 ・ 市内 ・ 欠席1-2限</div>
+            <div class="acts">
+              <button class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>承認</button>
+              <button class="rej"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14l6-6M15 14L9 8"/></svg>差戻し</button>
+              <button class="view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 本日の活動者 -->
+      <div class="panel">
+        <div class="ph"><div class="h"><span class="bar"></span>本日の就職活動者</div><span class="badge b-info">8名</span></div>
+        <div>
+          <div class="mr"><div class="a">情</div><div class="tx"><b>情報太郎</b><span>株式会社ほくしん情報システム</span></div><span class="t">10:00</span></div>
+          <div class="mr"><div class="a">応</div><div class="tx"><b>応用花子</b><span>株式会社サッポロソフトラボ</span></div><span class="t">14:00</span></div>
+          <div class="mr"><div class="a">基</div><div class="tx"><b>基本太郎</b><span>合同会社ノースデータラボ</span></div><span class="t">09:00</span></div>
+        </div>
+      </div>
+
+      <!-- 報告未提出者 -->
+      <div class="panel">
+        <div class="ph"><div class="h"><span class="bar" style="background:var(--warn)"></span>報告未提出者</div><span class="badge b-warn">3名</span></div>
+        <div>
+          <div class="mr"><div class="a w">情</div><div class="tx"><b>情報花子</b><span>5/26 面接 ・ 翌9時リマインド済</span></div><span class="remind">催促</span></div>
+          <div class="mr"><div class="a w">基</div><div class="tx"><b>基本太郎</b><span>5/27 筆記 ・ 受験報告 未提出</span></div><span class="remind">催促</span></div>
+          <div class="mr"><div class="a w">応</div><div class="tx"><b>応用花子</b><span>5/27 説明会 ・ 活動報告 未提出</span></div><span class="remind">催促</span></div>
+        </div>
+      </div>
+
+      <!-- イベント形態別 -->
+      <div class="panel">
+        <div class="ph"><div class="h"><span class="bar"></span>イベント形態別 件数</div></div>
+        <div class="bars">
+          <div class="barline"><span class="nm">説明会</span><span class="track"><span class="fill" style="width:88%"></span></span><span class="v">38</span></div>
+          <div class="barline"><span class="nm">筆記</span><span class="track"><span class="fill" style="width:52%"></span></span><span class="v">22</span></div>
+          <div class="barline"><span class="nm">適性</span><span class="track"><span class="fill" style="width:40%"></span></span><span class="v">17</span></div>
+          <div class="barline"><span class="nm">面接</span><span class="track"><span class="fill" style="width:66%"></span></span><span class="v">28</span></div>
+          <div class="barline"><span class="nm">内定後活動</span><span class="track"><span class="fill" style="width:20%"></span></span><span class="v">8</span></div>
+        </div>
+      </div>
+
+      <!-- 選考結果 -->
+      <div class="panel">
+        <div class="ph"><div class="h"><span class="bar"></span>選考結果</div></div>
+        <div class="donut-wrap">
+          <div class="donut"><div class="c"><b>113</b><span>件</span></div></div>
+          <div class="legend">
+            <div class="lg"><i style="background:var(--ok)"></i>合格・継続 55%</div>
+            <div class="lg"><i style="background:var(--blue)"></i>内定 23%</div>
+            <div class="lg"><i style="background:var(--warn)"></i>内定辞退 12%</div>
+            <div class="lg"><i style="background:var(--danger)"></i>不合格 10%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 取りまとめ名簿 -->
+      <div class="panel">
+        <div class="export">
+          <div class="x-h"><span class="bar"></span>学校取りまとめ名簿</div>
+          <div class="x-p">承認済みの活動・受験報告を一覧化しPDFで出力できます。破棄された申請は自動的に除外されます。</div>
+          <div class="x-btns">
+            <button class="btn solid"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>PDF出力</button>
+            <button class="btn ghost"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg>集計</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- BOTTOM TAB -->
+    <div class="tabbar">
+      <div class="tab-i on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>トップ</div>
+      <div class="tab-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>承認<span class="ct">4</span></div>
+      <div class="tab-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 15l2 2 4-4"/></svg>報告確認</div>
+      <div class="tab-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg>集計</div>
+      <div class="tab-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>受験報告</div>
+    </div>
+
+  </div>
+</body>
+</html>
